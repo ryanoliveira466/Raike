@@ -5,6 +5,8 @@ Crie duas pastas no seu computador após baixar os arquivos:
 
 * Uma para os arquivos do Front(HTML, CSS JS)
 * E outra para o Back(Laravel)
+
+Obs: As pastas tem que estar **SEPARADAS**, não podemos misturar as duas.
 ---
 ### 2 - Configurando Laravel:
 * Mude a porta do servidor do LivePreview do VScode para 5501(era pra ser a padrão 5500 mas por algum motivo no meu PC ele mudou), mais fácil em vez de mudar o JS em cada linha.
