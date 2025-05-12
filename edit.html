@@ -226,7 +226,7 @@
             color: #aaa;
         }
 
-        .pt-60{
+        .pt-60 {
             padding-top: 60px !important;
         }
     </style>
@@ -245,6 +245,7 @@
         <input type="text" id="javascriptForm" placeholder="Javascript:" required>
         <input type="text" id="cssForm" placeholder="CSS:" required>
         <input type="text" id="htmlForm" placeholder="HTML:" required>
+        <input type="text" id="photoForm" placeholder="Photo:">
         <button type="submit" id="submitForm">Save edit</button>
     </form>
 
@@ -265,21 +266,25 @@
         style="display: flex;pointer-events: none; backdrop-filter: blur(10px); opacity: 0; background-color: rgba(0, 0, 0, 0.5);"
         id="about">
 
-        <h1 class="text-light">Author</h1>
-        <div class="img-thumbnail" style="width: 300px; height: 300px;">
-            <img src="" id="imageProfile" class="w-100 h-100 object-fit-cover" alt="" srcset="">
+        <div class="w-100 vh-50 d-flex align-items-center flex-column overflow-y-auto">
+            <h1 class="text-light">Author</h1>
+            <div class="img-thumbnail" style="width: 300px; height: 300px;">
+                <img src="" id="imageProfile" class="w-100 h-100 object-fit-cover" alt="" srcset="">
+            </div>
+
+            <a class="nav-link text-light text-center" id="userLinkProfile" href="">
+                <p id="nameUserProfile"></p>
+            </a>
+
+
+            <button class="btn btn" id="closeAbout"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                    fill="white" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                </svg></button>
         </div>
 
-        <a class="nav-link text-light text-center" id="userLinkProfile" href="">
-            <p id="nameUserProfile"></p>
-        </a>
 
-
-        <button class="btn btn" id="closeAbout"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
-                fill="white" class="bi bi-x-lg" viewBox="0 0 16 16">
-                <path
-                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-            </svg></button>
     </div>
 
     <!-- description -->
@@ -287,12 +292,10 @@
         style="display: flex;pointer-events: none; backdrop-filter: blur(10px); opacity: 0; background-color: rgba(0, 0, 0, 0.5);"
         id="description">
 
-        <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); animation: fadeInUp 0.5s ease-out;"
-            class="text-center">
-            <textarea id="projectName"
-          rows="1"
-          placeholder="Enter project name"
-          style="
+        <div class="w-100 vh-50 d-flex align-items-center flex-column overflow-y-auto">
+            <div style="background: white; margin:0.5rem; padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); animation: fadeInUp 0.5s ease-out;"
+                class="text-center">
+                <textarea id="projectName" rows="1" placeholder="Enter project name" style="
             width: 100%;
             font-size: 2em;
             font-weight: bold;
@@ -305,16 +308,54 @@
             background: transparent;
           "></textarea>
 
-            <textarea id="projectDescription" rows="6" placeholder="Write your project description..."
-                style="width: 100%; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; resize: none; max-height: 200px;">
+                <textarea id="projectDescription" rows="6" placeholder="Write your project description..."
+                    style="width: 100%; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; resize: none; max-height: 200px;">
             </textarea>
+            </div>
+
+            <button class="btn btn" id="closeDescription"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                    fill="white" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                </svg></button>
         </div>
 
-        <button class="btn btn" id="closeDescription"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
-                fill="white" class="bi bi-x-lg" viewBox="0 0 16 16">
-                <path
-                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-            </svg></button>
+
+    </div>
+
+    <!-- photo -->
+    <div class="position-fixed transitionAll top-0 bottom-0 overflow-auto vw-100 vh-100 z-2 justify-content-center flex-column align-items-center"
+        style="display: flex;pointer-events: none; backdrop-filter: blur(10px); opacity: 0; background-color: rgba(0, 0, 0, 0.5);"
+        id="photo">
+
+        <div class="w-100 vh-50 d-flex align-items-center flex-column overflow-y-auto">
+            <h1 class="text-light">Thumbnail</h1>
+            <div id="imagePreview" style="height: auto; max-width: 600px; width: 90%;"
+                class="d-flex justify-content-center align-items-center text-center">
+                <img src="" id="cover" class="object-fit-cover w-100 h-100 rounded" alt="" srcset="">
+            </div>
+
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+
+            <label for="fileInput" style="margin: 0.5rem;
+              display: inline-block; 
+              padding: 10px 20px; 
+              background: #007bff; 
+              color: #fff; 
+              cursor: pointer; 
+              border-radius: 5px;
+            ">
+                Choose an image
+            </label>
+
+            <button class="btn btn" id="closePhoto"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                    fill="white" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                </svg></button>
+
+        </div>
+
 
     </div>
 
@@ -362,10 +403,13 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="save">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="greenyellow" class="bi bi-floppy-fill" viewBox="0 0 16 16">
-                                    <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z"/>
-                                    <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
-                                  </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="greenyellow"
+                                    class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
+                                    <path
+                                        d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z" />
+                                </svg>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -392,6 +436,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="descriptionLink">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="photoLink">Cover</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -504,6 +551,21 @@
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
     <script src="app.js" type="module"></script>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('cover').src = e.target.result
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 
 </html>

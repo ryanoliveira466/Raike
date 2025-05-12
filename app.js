@@ -457,7 +457,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   // Link to the page create inside page profile upload content
-
   if (document.getElementById('create')) {
     //Effects
     if (document.getElementById('create')) {
@@ -499,7 +498,39 @@ document.addEventListener('DOMContentLoaded', async function () {
       // JavaScript Editor
       window.jsEditor = new EditorView({
         state: EditorState.create({
-          doc: ``,
+          doc: `const mySplitText = new SplitText('body', {type:"chars", position: "relative" }); 
+// gsap.to(mySplitText.chars, {fontWeight: 900, duration: 5})
+setTimeout(() => {
+  gsap.timeline({ yoyo: true, repeat: -1, repeatDelay: 0.5, delay: 1})
+    .to(mySplitText.chars, { 
+      duration: .2,
+      fontWeight: 900, 
+      color: '#146EF5', 
+      scale:.7,
+      y: 6,
+      ease: 'power2.in',
+      rotation: '360deg',
+      stagger:{ 
+        grid: [14,14], 
+        amount: .8, 
+        from: 'center',
+      } 
+    })
+    .to(mySplitText.chars, { 
+      duration: .4,
+      fontWeight: 200,  
+      color: '#fff',
+      scale: 1,
+      y: 0,
+      rotation: '720deg',
+      ease: 'power3.inOut',
+      stagger:{ 
+        grid: [14,14], 
+        amount: .8, 
+        from: 'center'
+      } 
+    }, '-=.3')
+}, 500)`,
           extensions: [basicSetup, javascript()]
 
         }),
@@ -513,7 +544,46 @@ document.addEventListener('DOMContentLoaded', async function () {
       // CSS Editor
       window.cssEditor = new EditorView({
         state: EditorState.create({
-          doc: ``,
+          doc: `@font-face {
+  font-family: "LeagueSpartanVariable";
+  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2101521/LeagueSpartanVariable.ttf");
+
+  font-weight: 200 900;
+}
+
+@font-face {
+	font-family: 'Anybody';
+	src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/61488/ETCAnybodyPB.woff2') format('woff2-variations');
+	font-display: block;
+	font-weight: 200 900;
+	font-stretch: 10% 400%;
+}
+
+body {
+  height: 100vh;
+  width: 370px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background: #111;
+  color: #fff;
+  line-height: 15px;
+  font-size: 30px;
+  font-family: 'LeagueSpartanVariable', Courier, monospace;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  
+}
+
+div {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  // font-variation-settings: "wght" var(--wt);
+  font-weight: 200;
+}`,
           extensions: [basicSetup, css()]
         }),
         parent: document.getElementById("css-editor"),
@@ -526,7 +596,9 @@ document.addEventListener('DOMContentLoaded', async function () {
       // HTML Editor
       window.htmlEditor = new EditorView({
         state: EditorState.create({
-          doc: ``,
+          doc: `GSAP &times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXTGSAP&times;SPLITTEXT
+        <script src='https://unpkg.com/gsap@3/dist/gsap.min.js'></script>
+        <script src='https://unpkg.com/gsap@3/dist/SplitText.min.js'></script>`,
           extensions: [basicSetup, html()]
         }),
         parent: document.getElementById("html-editor"),
@@ -535,6 +607,9 @@ document.addEventListener('DOMContentLoaded', async function () {
           if (tr.docChanged) updatePreview();
         }
       });
+
+      updatePreview()
+
 
       // Optional: make content accessible via buttons
       window.getText = function (editorId) {
@@ -631,6 +706,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         description.style.opacity = 0
       })
 
+      // Photo
+      document.getElementById('photoLink').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        photo.style.pointerEvents = 'all';
+        photo.style.opacity = 1
+      })
+
+      document.getElementById('closePhoto').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        setTimeout(function () {
+          photo.style.pointerEvents = 'none'
+        }, 1500);
+        photo.style.opacity = 0
+      })
+
       document.getElementById('formatter').addEventListener('click', function () {
 
         const jsContent = window.jsEditor.state.doc.toString();
@@ -706,6 +796,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       const jsContent = window.jsEditor.state.doc.toString();
       const cssContent = window.cssEditor.state.doc.toString();
       const htmlContent = window.htmlEditor.state.doc.toString();
+      const photo = document.getElementById('cover').src;
+
 
       if (titleContent.trim() === "") {
         showErrorPopup("😐 Title is empty!");
@@ -727,12 +819,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         showErrorPopup("😐 HTML is empty!");
         return;
       }
+      if (photo.trim() === "" || photo.includes('default-cover-A7fK9x.jpg')) {
+        showErrorPopup("😐 Photo is empty!");
+        return;
+      }
 
       document.getElementById('projectNameForm').value = titleContent
       document.getElementById('projectDescriptionForm').value = descriptionContent
       document.getElementById('javascriptForm').value = jsContent
       document.getElementById('cssForm').value = cssContent
       document.getElementById('htmlForm').value = htmlContent
+      document.getElementById('photoForm').value = photo
       document.getElementById('submitForm').click()
     })
 
@@ -764,6 +861,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
       }
 
+      if (document.getElementById('cover').src.trim() == "") {
+        alert('Photo must not be blank')
+        return;
+      }
+
 
 
       const name = document.getElementById('projectNameForm').value
@@ -771,6 +873,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const javascript = document.getElementById('javascriptForm').value
       const css = document.getElementById('cssForm').value
       const html = document.getElementById('htmlForm').value
+      const photo = document.getElementById('cover').src
 
       showLoadingPopup("⏳ Saving...")
       try {
@@ -784,7 +887,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           method: 'POST',
           credentials: 'include',        // ← send the session cookie
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfToken },
-          body: JSON.stringify({ name, description, javascript, css, html })
+          body: JSON.stringify({ name, description, javascript, css, html, photo })
         });
 
         const data = await response.json();
@@ -983,6 +1086,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         description.style.opacity = 0
       })
 
+      // Photo
+      document.getElementById('photoLink').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        photo.style.pointerEvents = 'all';
+        photo.style.opacity = 1
+      })
+
+      document.getElementById('closePhoto').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        setTimeout(function () {
+          photo.style.pointerEvents = 'none'
+        }, 1500);
+        photo.style.opacity = 0
+      })
+
       document.getElementById('formatter').addEventListener('click', function () {
 
         const jsContent = window.jsEditor.state.doc.toString();
@@ -1047,6 +1165,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('nameUserProfile').innerText = `${data.userName}`
         document.getElementById('imageProfile').src = `${serverStorage}${data.userImage}`
         document.getElementById('userLinkProfile').href = `member.html?slug=${data.userSlug}`
+        document.getElementById('cover').src = `${serverStorage}${data.project.photo}`
 
         const formattedJS = js_beautify(data.project.javascript, {
           indent_size: 2,
@@ -1102,6 +1221,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const jsContent = window.jsEditor.state.doc.toString();
       const cssContent = window.cssEditor.state.doc.toString();
       const htmlContent = window.htmlEditor.state.doc.toString();
+      const photo = document.getElementById('cover').src;
 
       if (titleContent.trim() === "") {
         showErrorPopup("😐 Title is empty!");
@@ -1123,12 +1243,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         showErrorPopup("😐 HTML is empty!");
         return;
       }
+      if (photo.trim() === "") {
+        showErrorPopup("😐 Photo is empty!");
+        return;
+      }
 
       document.getElementById('projectNameForm').value = titleContent
       document.getElementById('projectDescriptionForm').value = descriptionContent
       document.getElementById('javascriptForm').value = (jsContent);
       document.getElementById('cssForm').value = cssContent
       document.getElementById('htmlForm').value = htmlContent
+      document.getElementById('photoForm').value = photo
       document.getElementById('submitForm').click()
     })
 
@@ -1160,6 +1285,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
       }
 
+      if (document.getElementById('photoForm').value.trim() == "") {
+        alert('HTML must not be blank')
+        return;
+      }
+
 
 
       const name = document.getElementById('projectNameForm').value
@@ -1167,6 +1297,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const javascript = document.getElementById('javascriptForm').value
       const css = document.getElementById('cssForm').value
       const html = document.getElementById('htmlForm').value
+      const photo = document.getElementById('cover').src
 
       showLoadingPopup("⏳ Saving...")
       try {
@@ -1180,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           method: 'POST',
           credentials: 'include',        // ← send the session cookie
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrfToken },
-          body: JSON.stringify({ name, description, javascript, css, html })
+          body: JSON.stringify({ name, description, javascript, css, html, photo })
         });
 
         const data = await response.json();
@@ -1206,10 +1337,53 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   }
 
-
-
   //Member public profile
   if (document.getElementById('userProfileMember')) {
+
+    //Effects
+    if (document.getElementById('userProfileMember')) {
+      // Projects
+      document.getElementById('projectsLink').addEventListener('click', function () {
+        let projects = document.getElementById('projects')
+        projects.classList.remove('vh-0')
+        projects.classList.add('vh-100')
+      })
+
+      document.getElementById('closeProjects').addEventListener('click', function () {
+        let projects = document.getElementById('projects')
+        projects.classList.remove('vh-100')
+        projects.classList.add('vh-0')
+        console.log('pioi');
+
+      })
+
+
+      //Heart filled logic
+      const heartToggle = document.getElementById('heartToggle');
+      const heartIcon = document.getElementById('heartIcon');
+      let isFilled = false;
+      heartToggle.addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent navigation
+
+        if (isFilled) {
+          heartIcon.setAttribute('class', 'bi bi-heart');
+          heartIcon.innerHTML = `
+                  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+              `;
+        } else {
+          heartIcon.setAttribute('class', 'bi bi-heart-fill');
+          heartIcon.innerHTML = `
+                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+              `;
+        }
+
+        isFilled = !isFilled;
+      });
+    }
+
+
+
+    showLoadingPopup()
     try {
       const slug = new URLSearchParams(window.location.search).get('slug');
       const response = await fetch(`http://127.0.0.1:8000/api/user/slug/${slug}`, {
@@ -1224,17 +1398,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       if (response.ok) {
         alert('Member listed successfully: ' + data.message);
-        document.getElementById('message').innerText = `${data.message}` || 'An unknown error occurred';
         document.getElementById('name').innerText = `${data.user.name}`;
         document.getElementById('email').innerText = `${data.user.email}`;
+        document.getElementById('photo').src = `${serverStorage}${data.user.photo}`
+        document.getElementById('backgroundPhoto').src = `${serverStorage}${data.user.photo}`
       } else {
         alert('Listeninig member failed: ' + data.message);
         alert('Listeninig member failed: ' + data.error);
-        document.getElementById('message').innerText = `${data.message}: ${data.error}` || 'An unknown error occurred';
+        showErrorPopup()
       }
     } catch (error) {
       alert('Listeninig member failed: ' + error.message);
-      document.getElementById('message').innerText = error.message || 'An unknown error occurred';
+    }
+    finally {
+      hideLoadingPopup()
     }
 
 
@@ -1242,7 +1419,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
   //Member public posts
-  if (document.getElementById('projects')) {
+  if (document.getElementById('listProjects')) {
     let arrayUserProjects = []
     getAllUserProjects()
 
@@ -1259,7 +1436,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (response.ok) {
           alert('Getting all projects from user successfully: ' + data.message);
-          document.getElementById('message').innerText = data.message;
           data.projects.forEach(element => {
             arrayUserProjects.push(element)
           });
@@ -1267,11 +1443,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else {
           alert('Getting all projects from user failed: ' + data.message);
           alert('Getting all projects from user failed: ' + data.error);
-          document.getElementById('message').innerText = `${data.message}: ${data.error}` || 'An unknown error occurred';
         }
       } catch (error) {
         alert('Getting all projects from user failed: ' + error.message);
-        document.getElementById('message').innerText = error.message || 'An unknown error occurred';
       }
     }
 
@@ -1281,22 +1455,141 @@ document.addEventListener('DOMContentLoaded', async function () {
     function displayProjects() {
       if (document.getElementById('projects')) {
         const slugUser = new URLSearchParams(window.location.search).get('slug');
-        let projectsTable = document.getElementById('projects')
+        let projectsTable = document.getElementById('listProjects')
+
+
+        //Unfortunally it lags, better put a thumbnail for project
+        //         for (let i = 0; i < arrayUserProjects.length; i++) {
+
+        //           const jsContent = arrayUserProjects[i].javascript;
+        //           const cssContent = arrayUserProjects[i].css;
+        //           const htmlContent = arrayUserProjects[i].html;
+
+
+        //           const fullHTML = `
+        //             <html style="overflow: auto;">
+        //                 <head>
+        //                     <style>${cssContent}</style>
+        //                 </head>
+        //                 <body>
+        //                     ${htmlContent}
+        //                     <script>
+        //                         ${jsContent}
+        //                     <\/script>
+        //                 </body>
+        //             </html>`;
+
+        //           projectsTable.innerHTML += `
+        //              <a class="nav-link text-light" href="project.html?slug=${slugUser}&projectSlug=${arrayUserProjects[i].slug}">
+        //              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+        //   <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+        //   <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+        // </svg>
+        //            </a>
+        //             `
+
+        //           const iframe = document.createElement('iframe');
+        //           iframe.setAttribute('width', '100%');
+        //           iframe.setAttribute('height', '400');
+        //           iframe.setAttribute('frameborder', '0');
+        //           iframe.srcdoc = fullHTML;
+
+        //           // Append to the container
+        //           projectsTable.appendChild(iframe);
+        //         }
 
         for (let i = 0; i < arrayUserProjects.length; i++) {
-          projectsTable.innerHTML += `
-                  <div style="margin: 0.5rem; display: flex; flex-direction: column;border: 1px solid black;">
-                    <p>${arrayUserProjects[i].name}</p>
-                    <p>${arrayUserProjects[i].description}</p>
-                    <p>${arrayUserProjects[i].javascript}</p>
-                    <p>${arrayUserProjects[i].css}</p>
-                    <p>${arrayUserProjects[i].html}</p>
-                    <a href="project.html?slug=${slugUser}&projectSlug=${arrayUserProjects[i].slug}" style="color: blue; text-decoration: underline;">
-                      Link para projeto ${arrayUserProjects[i].name}
-                    </a>
-                  </div>
-                `;
+          const project = arrayUserProjects[i];
+          const wrapperId = `image-wrapper-${slugUser}-${project.slug}`;
+          const imageId = `image-cover-${slugUser}-${project.slug}`;
+
+          // Insert HTML block
+          projectsTable.insertAdjacentHTML("beforeend", `
+            <div class="p-2 d-flex justify-content-center align-items-center text-center flex-column" style="height: auto; max-width: 600px; width: 90%;">
+              <a class="nav-link text-light" href="project.html?slug=${slugUser}&projectSlug=${project.slug}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+              </a>
+
+              <div class="d-flex justify-content-center form-check form-switch mb-3">
+              <input class="form-check-input" style="cursor: pointer;" type="checkbox" id="checkNativeSwitch-${slugUser}-${project.slug}">
+              </div>
+        
+              <div id="${wrapperId}" class="position-relative w-100" style="aspect-ratio: 16 / 9;">
+                <img src="${serverStorage}${project.photo}" id="${imageId}" class="w-100 h-100 object-fit-cover rounded card-effect" alt="">
+              </div>
+            </div>
+          `);
+
+
+          const wrapper = document.getElementById(wrapperId);
+          const img = document.getElementById(imageId);
+          const iframe = document.createElement("iframe");
+          iframe.className = "position-absolute top-0 start-0 w-100 h-100 border-0 rounded card-effect";
+          iframe.style.opacity = "0"
+          iframe.style.display = "none"
+          iframe.style.transform = "rotateY(180deg)";
+          iframe.style.zIndex = "2";
+
+          const jsContent = project.javascript;
+          const cssContent = project.css;
+          const htmlContent = project.html;
+
+          const fullHTML = `
+            <html>
+              <head><style>${cssContent}</style></head>
+              <body>
+                ${htmlContent}
+                <script>${jsContent}<\/script>
+              </body>
+            </html>
+          `;
+
+          iframe.srcdoc = fullHTML;
+          wrapper.appendChild(iframe);
+
+          const checkbox = document.getElementById(`checkNativeSwitch-${slugUser}-${project.slug}`);
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              this.disabled = true
+              iframe.style.display = "flex";
+              setTimeout(() => {
+                img.style.transform = "rotateY(180deg)";
+                img.style.opacity = "0";
+                iframe.style.transform = "rotateY(0deg)";
+                iframe.style.opacity = "1";
+                iframe.style.pointerEvents = "auto";
+              }, 10);
+              setTimeout(() => {
+                this.disabled = false
+              }, 1200);
+            } else {
+              this.disabled = true
+              img.style.transform = "rotateY(0deg)";
+              img.style.opacity = "1";
+              iframe.style.transform = "rotateY(180deg)";
+              iframe.style.opacity = "0";
+              iframe.style.pointerEvents = "none";
+              setTimeout(() => {
+                this.disabled = false
+              }, 1200);
+            }
+          });
+          
+          
+          iframe.addEventListener("transitionend", function (e) {
+            if (e.propertyName === "opacity" && iframe.style.opacity === "0") {
+              iframe.style.display = "none";
+            }
+          });
+          
+
         }
+
+
+
 
       }
     }
@@ -1479,6 +1772,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         description.style.opacity = 0
       })
 
+      // Photo
+      document.getElementById('photoLink').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        photo.style.pointerEvents = 'all';
+        photo.style.opacity = 1
+      })
+
+      document.getElementById('closePhoto').addEventListener('click', function () {
+        let photo = document.getElementById('photo')
+        setTimeout(function () {
+          photo.style.pointerEvents = 'none'
+        }, 1500);
+        photo.style.opacity = 0
+      })
+
       document.getElementById('formatter').addEventListener('click', function () {
 
         const jsContent = window.jsEditor.state.doc.toString();
@@ -1541,6 +1849,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('projectDescription').value = `${data.project.description}`
         document.getElementById('nameUserProfile').innerText = `${data.userName}`
         document.getElementById('imageProfile').src = `${serverStorage}${data.userImage}`
+        document.getElementById('cover').src = `${serverStorage}${data.project.photo}`
+
 
         const formattedJS = js_beautify(data.project.javascript, {
           indent_size: 2,
@@ -1587,6 +1897,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 });
+
+
+
+
 
 //Utilites
 // Load profile info
