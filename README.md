@@ -14,7 +14,7 @@ https://www.youtube.com/watch?v=yXNh70VH47Y.
 
 
 ```
-comoposer install
+composer install
 ```
 
 Depois do *composer install* você vai ter que criar o arquivo .env com os seguintes dados(Veja a **.env.example** no arquivo e copie).
